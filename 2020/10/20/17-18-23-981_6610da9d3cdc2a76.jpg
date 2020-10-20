@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="ahrefs-site-verification" content="b21134b1225ebf149e1266990fcc7b2bb3d9812fb4c9cdb1db0e5b103b2be6d2">
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link rel="shortcut icon" href="https://www.sqlservercentral.com/wp-content/uploads/2019/04/favicon.ico" />
+    <link rel="pingback" href="https://www.sqlservercentral.com/xmlrpc.php"/>
+    <title>Connecting to SQL Server with MuleSoft AnyPoint 3.9 &ndash; SQLServerCentral</title>
+
+            <meta name="wp:id" content="3788882" />
+        
+<!-- This site is optimized with the Yoast SEO plugin v11.6 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="I usually write about SQL Server, but I thought I&#039;d share my experience of using SQL Server from MuleESB. If you haven&#039;t used Mule before, it&#039;s an"/>
+<link rel="canonical" href="https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Connecting to SQL Server with MuleSoft AnyPoint 3.9 &ndash; SQLServerCentral" />
+<meta property="og:description" content="I usually write about SQL Server, but I thought I&#039;d share my experience of using SQL Server from MuleESB. If you haven&#039;t used Mule before, it&#039;s an" />
+<meta property="og:url" content="https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9" />
+<meta property="og:site_name" content="SQLServerCentral" />
+<meta property="article:section" content="Mulesoft" />
+<meta property="og:image" content="https://www.xten.uk/Content/images/blog/JDBC-Install.png" />
+<meta property="og:image:secure_url" content="https://www.xten.uk/Content/images/blog/JDBC-Install.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="I usually write about SQL Server, but I thought I&#039;d share my experience of using SQL Server from MuleESB. If you haven&#039;t used Mule before, it&#039;s an" />
+<meta name="twitter:title" content="Connecting to SQL Server with MuleSoft AnyPoint 3.9 &ndash; SQLServerCentral" />
+<meta name="twitter:site" content="@sqlservercentrl" />
+<meta name="twitter:image" content="https://www.xten.uk/Content/images/blog/JDBC-Install.png" />
+<meta name="twitter:creator" content="@sqlservercentrl" />
+<script type='application/ld+json' class='yoast-schema-graph yoast-schema-graph--main'>{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.sqlservercentral.com/#organization","name":"SQLServerCentral","url":"https://www.sqlservercentral.com/","sameAs":["https://twitter.com/sqlservercentrl"],"logo":{"@type":"ImageObject","@id":"https://www.sqlservercentral.com/#logo","url":"https://www.sqlservercentral.com/wp-content/uploads/2019/05/ssc-logo.png","width":60,"height":53,"caption":"SQLServerCentral"},"image":{"@id":"https://www.sqlservercentral.com/#logo"}},{"@type":"WebSite","@id":"https://www.sqlservercentral.com/#website","url":"https://www.sqlservercentral.com/","name":"SQLServerCentral","publisher":{"@id":"https://www.sqlservercentral.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://www.sqlservercentral.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9#primaryimage","url":"https://www.xten.uk/Content/images/blog/JDBC-Install.png"},{"@type":"WebPage","@id":"https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9#webpage","url":"https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9","inLanguage":"en-GB","name":"Connecting to SQL Server with MuleSoft AnyPoint 3.9 &ndash; SQLServerCentral","isPartOf":{"@id":"https://www.sqlservercentral.com/#website"},"primaryImageOfPage":{"@id":"https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9#primaryimage"},"datePublished":"2020-10-19T00:00:01+00:00","dateModified":"2020-10-09T21:01:07+00:00","description":"I usually write about SQL Server, but I thought I'd share my experience of using SQL Server from MuleESB. If you haven't used Mule before, it's an"}]}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//cdn.rawgit.com' />
+<link rel='dns-prefetch' href='//cdnjs.cloudflare.com' />
+<link rel='dns-prefetch' href='//www.sqlservercentral.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="SQLServerCentral &raquo; Feed" href="https://www.sqlservercentral.com/feed" />
+<link rel="alternate" type="application/rss+xml" title="SQLServerCentral &raquo; Comments Feed" href="https://www.sqlservercentral.com/comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.sqlservercentral.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.1.1"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<!-- managing ads with Advanced Ads – https://wpadvancedads.com/ --><script>
+					advanced_ads_ready=function(){var fns=[],listener,doc=typeof document==="object"&&document,hack=doc&&doc.documentElement.doScroll,domContentLoaded="DOMContentLoaded",loaded=doc&&(hack?/^loaded|^c/:/^loaded|^i|^c/).test(doc.readyState);if(!loaded&&doc){listener=function(){doc.removeEventListener(domContentLoaded,listener);window.removeEventListener("load",listener);loaded=1;while(listener=fns.shift())listener()};doc.addEventListener(domContentLoaded,listener);window.addEventListener("load",listener)}return function(fn){loaded?setTimeout(fn,0):fns.push(fn)}}();
+			</script><style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='wp-block-library-css'  href='https://www.sqlservercentral.com/wp-includes/css/dist/block-library/style.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='wp-block-library-css'  href='https://www.sqlservercentral.com/wp-includes/css/dist/block-library/style.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-widgets-mini-teaser-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-widgets/css/mini-teaser.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-widgets-mini-teaser-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-widgets/css/mini-teaser.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-bbp-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-bbp/css/ssc-bbp.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-bbp-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-bbp/css/ssc-bbp.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-briefcase-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-briefcase/css/ssc-briefcase.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-briefcase-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-briefcase/css/ssc-briefcase.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-contributions-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-contributions/css/contributions.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-contributions-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-contributions/css/contributions.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-leaderboard-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-leaderboard/css/leaderboard.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-leaderboard-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-leaderboard/css/leaderboard.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-related-forum-topics-top-comments-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/css/top-comments.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-related-forum-topics-top-comments-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/css/top-comments.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-social-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-social/css/icons.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-social-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-social/css/icons.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-star-ratings-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/css/ssc-star-ratings.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-star-ratings-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/css/ssc-star-ratings.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlighting-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/syntax-highlighting.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlighting-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/syntax-highlighting.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlighting-legacy-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/legacy.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlighting-legacy-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/legacy.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-default-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/default.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-default-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/default.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-ssms-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/ssms.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-ssms-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/ssms.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-custom-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/custom.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-custom-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/custom.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='featherlight-css-css'  href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='featherlight-css-css'  href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-lightbox-css-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/css/ssc-lightbox.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-lightbox-css-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/css/ssc-lightbox.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='bbp-default-css'  href='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684' type='text/css' media='screen' />
+<noscript><link rel='stylesheet' id='bbp-default-css'  href='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684' type='text/css' media='screen' /></noscript>
+
+<link rel='stylesheet' id='bbp-ssc-css'  href='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/bbpress/bbpress.min.css?ver=2.5.14-6684' type='text/css' media='screen' />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='gglcptch-css'  href='https://www.sqlservercentral.com/wp-content/plugins/google-captcha/css/gglcptch.css?ver=1.39' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='gglcptch-css'  href='https://www.sqlservercentral.com/wp-content/plugins/google-captcha/css/gglcptch.css?ver=1.39' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='hm_bbpui-css'  href='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/css/bbp-image-upload.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='hm_bbpui-css'  href='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/css/bbp-image-upload.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='searchandfilter-css'  href='https://www.sqlservercentral.com/wp-content/plugins/search-filter/style.css?ver=1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='searchandfilter-css'  href='https://www.sqlservercentral.com/wp-content/plugins/search-filter/style.css?ver=1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc2018-googlefonts-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc2018-googlefonts-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel='stylesheet' id='ssc2018-stylesheet-css'  href='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/css/style.css?ver=2020-06-03' type='text/css' media='all' />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='d4p-bbattachments-css-css'  href='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/css/front.css?ver=3.1_b2302_free' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='d4p-bbattachments-css-css'  href='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/css/front.css?ver=3.1_b2302_free' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='simple-favorites-css'  href='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/css/favorites.css?ver=2.3.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='simple-favorites-css'  href='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/css/favorites.css?ver=2.3.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='wp-user-avatar-css'  href='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/css/wp-user-avatar.css?ver=4.1.8' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='wp-user-avatar-css'  href='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/css/wp-user-avatar.css?ver=4.1.8' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='jcrop-css'  href='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.css?ver=0.9.12' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='jcrop-css'  href='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.css?ver=0.9.12' type='text/css' media='all' /></noscript>
+
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' defer src='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js?ver=5.1.1'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/js/ssc-lightbox.min.js?ver=5.1.1'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/js/bbp-image-upload.js?ver=5.1.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var favorites_data = {"ajaxurl":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","nonce":"858c0121db","favorite":"Add to briefcase <i class=\"sf-icon-star-empty\"><\/i>","favorited":"Remove from briefcase <i class=\"sf-icon-star-full\"><\/i>","includecount":"","indicate_loading":"","loading_text":"Loading","loading_image":"","loading_image_active":"","loading_image_preload":"","cache_enabled":"1","button_options":{"button_type":"custom","custom_colors":false,"box_shadow":false,"include_count":false,"default":{"background_default":false,"border_default":false,"text_default":false,"icon_default":false,"count_default":false},"active":{"background_active":false,"border_active":false,"text_active":false,"icon_active":false,"count_active":false}},"authentication_modal_content":"<p>Please login to add favorites.<\/p><p><a href=\"#\" data-favorites-modal-close>Dismiss this notice<\/a><\/p>","authentication_redirect":"","dev_mode":"","logged_in":"","user_id":"0","authentication_redirect_url":"https:\/\/www.sqlservercentral.com\/wp-login.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/js/favorites.min.js?ver=2.3.1'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.js?ver=0.9.12'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/js/webcam.js?ver=4.1.8'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var wpua_imgloader_vars = {"url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","WPUA_URL":"https:\/\/www.sqlservercentral.com\/wp-content\/plugins\/wp-user-avatar-pro\/","WPUA_MEDIA":"false","wpua_webcam":"true","wpua_string":{"file_type_error":"File Type is not valid.","file_type_error_description":"Valid File Type is jpeg, png and gif.","file_size_error":"File Size is too big","file_size_error_description":"File uploading limits:  Size 8.00 MB","no_image":"Oops! Seems you didn't select any image.","no_image_instruction":"It's easy. Click within dotted area.","upload_image":"Upload Image","media_uploader":"Media Uploader","drop_instruction":"Drop image here or click to upload.","control_instruction":"Select your image, crop and save it.","close":"Close","save":"Save Image","capture_image":"Capture Image","webcam_on":"Use Camera","mediamanager_on_title":"Media Manager is turned ON.","mediamanager_on_instruction":"Click within dotted area to choose image from media manager"},"restriction":{"strickly_resize":true,"max_file_size":"8388608","max_file_width":0,"max_file_height":0,"wp_user_avatar_thumbnail_w":false,"wp_user_avatar_thumbnail_h":false}};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/js/wpua-imgloader.js?ver=4.1.8'></script>
+<link rel='https://api.w.org/' href='https://www.sqlservercentral.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.sqlservercentral.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.sqlservercentral.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.1.1" /><meta name="projectnami:version" content="2.1.1" />
+<link rel='shortlink' href='https://www.sqlservercentral.com/?p=3788882' />
+<link rel="alternate" type="application/json+oembed" href="https://www.sqlservercentral.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fconnecting-to-sql-server-with-mulesoft-anypoint-3-9" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.sqlservercentral.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fconnecting-to-sql-server-with-mulesoft-anypoint-3-9&#038;format=xml" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-90206-6"></script>
+<script>
+    const sites = [
+        'www.red-gate.com',
+        'www.sqlservercentral.com',
+        'documentation.red-gate.com',
+        'sqlmonitormetrics.red-gate.com'
+    ];
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());  
+     gtag('config', 'UA-90206-6');
+     gtag('config', 'UA-90206-169', { 'linker': { 'domains': sites } });
+</script><script type="text/javascript">
+            /* <![CDATA[ */
+            var gdbbPressAttachmentsInit = {
+                max_files: 10            };
+            /* ]]> */
+        </script>			<style>
+			.avatar_overlays p  {
+ 				background: rgba(0, 0, 0, );
+ 				color: ;
+				}
+			.wpuap_tooltip:hover .wpuap_tooltip_content {
+		    display: inline;
+		    position: absolute;
+		    color: ;
+		    border: 1px solid ;
+		    background: 			}
+
+			.avatar_container [class^=icon-],
+			.avatar_container [class*=" icon-"] {
+			    color:  !important;
+			}
+
+			#ci-modal,.ci_controls {
+			    background-color:  !important;
+			}
+						</style>
+		</head>
+
+<body class="ssc_article-template-default single single-ssc_article postid-3788882" itemscope itemtype="http://schema.org/WebPage" >
+
+<div id="page" class="hfeed site">
+
+    <!-- HEADER -->
+    <header class="site-header band header--primary">
+        <nav>
+            <div class="header--primary__nav__inner">
+                <a href="https://www.sqlservercentral.com/" title="SQLServerCentral" rel="home" class="header--primary__app-logo-container"><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc-logo.svg" alt="" /></a>
+                <a href="https://www.sqlservercentral.com/" title="SQLServerCentral" rel="home" class="header--primary__app-name-container "><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc.svg" alt="" /></a>
+                <ul class="js-dropdown hide-on-medium">
+                    <li id="menu-item-7" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-7"><a href="/articles">Articles</a></li>
+<li id="menu-item-8" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8"><a href="/editorials">Editorials</a></li>
+<li id="menu-item-9" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9"><a href="/stairways">Stairways</a></li>
+<li id="menu-item-10" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-10"><a href="/forums">Forums</a>
+<ul class="sub-menu">
+	<li id="menu-item-16" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a title="Top level for all forums" href="/forums">Forums home</a></li>
+	<li id="menu-item-3052410" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3052410"><a title="Threads listed in reverse order by the most recent reply" href="/forums/view/topics-freshness">Active threads</a></li>
+	<li id="menu-item-18" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18"><a title="Threads listed in reverse order by the creation date" href="/forums/view/latest-topics">Latest topics</a></li>
+	<li id="menu-item-17" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17"><a title="Most replies in the last 24 hours" href="/forums/view/popular">Most popular</a></li>
+	<li id="menu-item-3644583" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3644583"><a href="/totalscores#leaderboard-forum">Leaderboard</a></li>
+</ul>
+</li>
+<li id="menu-item-11" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11"><a href="/scripts">Scripts</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12"><a href="/questions">QotD</a></li>
+<li id="menu-item-13" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13"><a href="/books">Books</a></li>
+<li id="menu-item-14" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14"><a href="https://ask.sqlservercentral.com/">Ask SSC</a></li>
+<li id="menu-item-15" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15"><a href="/blogs">Blogs</a></li>
+                </ul>
+
+                <span class="header--primary__site-tools">
+                    <ul>
+                        <li class="hide-on-medium"><a href="/contributions"><span class="icon--edit"></span>Write for us</a></li>
+                        <li class="hide-on-max show-on-medium"><a href="/search" class="header--primary__icon icon--search" title="Search"></a></li>
+                        <li class="hide-on-max show-on-large"><a href="" class="header--primary__icon header--primary__menu-button">Menu</a></li>
+                    </ul>
+                    <ul class="js-dropdown dropdown hide-on-small">
+                                                    <li><a href="https://www.sqlservercentral.com/wp-login.php?action=register">Register</a></li>
+                            <li><a href="https://www.sqlservercentral.com/wp-login.php?redirect_to=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fconnecting-to-sql-server-with-mulesoft-anypoint-3-9">Login</a></li>
+                                            </ul>
+                </span>
+            </div>
+
+            <ul class="header--primary__menu--mobile js-dropdown">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-7"><a href="/articles">Articles</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8"><a href="/editorials">Editorials</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9"><a href="/stairways">Stairways</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-10"><a href="/forums">Forums</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a title="Top level for all forums" href="/forums">Forums home</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3052410"><a title="Threads listed in reverse order by the most recent reply" href="/forums/view/topics-freshness">Active threads</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18"><a title="Threads listed in reverse order by the creation date" href="/forums/view/latest-topics">Latest topics</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17"><a title="Most replies in the last 24 hours" href="/forums/view/popular">Most popular</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3644583"><a href="/totalscores#leaderboard-forum">Leaderboard</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11"><a href="/scripts">Scripts</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12"><a href="/questions">QotD</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13"><a href="/books">Books</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14"><a href="https://ask.sqlservercentral.com/">Ask SSC</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15"><a href="/blogs">Blogs</a></li>
+
+                                <li class="menu-item"><a href="/contributions">Write for us</a></li>
+
+                                    <li><a href="https://www.sqlservercentral.com/wp-login.php?action=register">Register</a></li>
+                    <li><a href="https://www.sqlservercentral.com/wp-login.php?redirect_to=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fconnecting-to-sql-server-with-mulesoft-anypoint-3-9">Login</a></li>
+                            </ul>
+        </nav>
+    </header>
+    <!-- /HEADER -->
+
+    <!-- SECONDARY NAV -->
+    <nav class="background-color--grey--1 border-bottom border-color--grey--3 nav-secondary">
+        <div class="band__inner-container border-left border-right border-color--grey--3 padded--none">
+            <form class="search display--inline border-left border-right border-color--grey--3 padded-right--tight float-right" action="https://www.sqlservercentral.com/" method="get">
+                <input type="text" name="s" placeholder="Search..." value=""/>
+                <input type="image" src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/nav-secondary/search-icon.svg"/>
+            </form>
+        </div>
+    </nav>
+    <!-- /SECONDARY NAV -->
+
+    
+    
+<!-- single.php -->
+    <!-- template-parts/content-single.php -->
+<div class="band">
+    <div class="band__inner-container padded--tight--small grid" itemscope itemtype="http://schema.org/Article" datePublished="">
+
+        <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+            <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <meta itemprop="url" content="https://www.sqlservercentral.com/wp-content/uploads/2019/05/ssc-logo.png">
+                <meta itemprop="width" content="60"> <meta itemprop="height" content="53">
+            </div>
+            <meta itemprop="name" content="SQLServerCentral.com">
+        </div>
+
+        <meta itemprop="mainEntityOfPage" content="https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9">
+
+        <div class="grid__col grid__col--span-2-of-12 hide-on-small content-single-sidebar-left">
+            
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/technical-article.svg" alt="" /></a>
+    </div>
+<img class="hidden" itemprop="image" src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/technical-article.png" alt="" />        </div>
+
+        <div class="grid__col grid__col--span-8-of-12">
+            <div class="padded-h spaced-bottom padded-h--none--small">
+                <h1 class="text--bold" itemprop="name">Connecting to SQL Server with MuleSoft AnyPoint 3.9</h1>
+                <meta itemprop="headline" content="Connecting to SQL Server with MuleSoft AnyPoint 3.9">
+                <div class="meta spaced-bottom--tight">
+                    <p class="gamma">
+                        <a href="https://www.sqlservercentral.com/author/the-xten-team" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">The xTEN Team</span></span></a>,
+                        <span itemprop="datePublished"><span itemprop="dateCreated">2020-10-19</span></span>
+                        <meta itemprop="dateModified" content="October 9, 2020">
+                        <br />
+                    </p>
+                </div>
+
+                <div class="content" itemprop="articleBody">
+                    <p>I usually write about SQL Server, but I thought I'd share my experience of using SQL Server from MuleESB. If you haven't used Mule before, it's an open-source ESB (enterprise service bus), which also has a paid-for Enterprise version. I've been using it since 2015 and have been impressed with how quickly we can create quite complex applications. It's swift, easy to use and free if you use the community version; I also have some experience with Java, which helps. I tend to use Mule for applications that process web requests or when integrating with existing systems and SQL Server Integration Services (SSIS) for moving data around.</p>
+<p>I've been working on a MuleESB program, which needs to log millions of requests a day, and with the recent advancements in SQL Server, it's now the obvious choice for storing almost any type of data. You can also run SQL Server 2017 on Linux, which will please a lot of Mule users. Mule previously had a SQL Server connector, but that has been deprecated and replaced with the Generic Database Connector. That works with most JDBC drivers.</p>
+<p>To get started, we'll need to download the latest driver from Microsoft and add it to our project. We can then configure the database using a standard connection string.</p>
+<h2>Adding the JDBC driver</h2>
+<p>At the time of writing, the latest is JDBC 6.4; which you'll need if you want to use SQL Server 2017 but my screenshots all reference JDBC 6.2. You need to <a href="https://www.microsoft.com/en-us/download/details.aspx?id=56615">Download the Microsoft JDBC Driver for SQL Server</a>. You can add this to your Mule Project using <em>Add External JARS</em>... and selecting either <em>mssql-jdbc-6.2.2.jre7.jar</em> or <em>mssql-jdbc-6.2.2.jre8.jar;</em> depending on your JRE.</p>
+<p><strong>Note:</strong> You'll need JDBC 6.4 if you want a driver for JRE 9; you'll also need Mule 4 as 3.9 doesn't support Java 9.</p>
+<p><img class="img-fluid" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.xten.uk/Content/images/blog/JDBC-Install.png" data-lazy-load alt="How to perform a JDBC Install in Microsoft Windows" /></p>
+<h2>Configuring the Database Connector</h2>
+<p>The database connector is surprisingly easy to configure. We simply add a standard connection string and reference the JDBC driver, which is the same regardless of which JDBC driver you use. <a href="https://www.aireforge.com/">Aireforge</a> has created an online connection string builder which you may find useful here - <a href="https://www.aireforge.com/tools/sql-server-connection-string-generator">Connection String Builder for JDBC</a>.</p>
+<p><img class="img-fluid" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.xten.uk/Content/images/blog/global-element-properties.png" data-lazy-load alt="Global Element Properties window within Mulesoft 3.9" /></p>
+<p>Here's an example which connects to a local instance which contains a database called TestDatabase. I've added the port, but this isn't required unless it was changed from the default of 1433.</p>
+<pre class="prettyprint  lang-plain">jdbc:sqlserver://127.0.0.1:1433;databaseName=TestDatabase;user=TestUser;password=reallySecure!;
+</pre>
+<p>The above is fine for testing but I would suggest that you use parameters that are stored in a central configuration file to make your life easier. This will enable you to automatically set the environment settings using a local config file or manually change between Dev and Production by commenting each section out. I would also advocate using an application name, as this will help you or the database team to identify your application; rather than it simply showing as a JDBC program.</p>
+<pre class="prettyprint  lang-plain">jdbc:sqlserver://${mssql.server}:${mssql.port};databaseName=${mssql.database};user=${mssql.user};password=${mssql.password};
+</pre>
+<p>Once this is set, you can store the following parameters in another mule config file. I tend to use global_properties.xml</p>
+<pre class="prettyprint  lang-xml"> &lt;!-- Test Database Settings --&gt;
+ &lt;global-property name="mssql.server" value="127.0.0.1" doc:name="SQL Server Instance" /&gt;
+ &lt;global-property name="mssql.port" value="1433" doc:name="SQL Server Port" /&gt;
+ &lt;global-property name="mssql.database" value="TestDatabase" doc:name="Database Name" /&gt;
+ &lt;global-property name="mssql.user" value="TestUser" doc:name="Username" /&gt;
+ &lt;global-property name="mssql.password" value="reallySecure!" doc:name="Password" /&gt;
+&lt;!-- Production Database Settings
+&lt;global-property name="mssql.server" value="proddb1.xten.uk" doc:name="SQL Server Instance" /&gt;
+&lt;global-property name="mssql.port" value="1433" doc:name="SQL Server Port" /&gt;
+&lt;global-property name="mssql.database" value="LiveDB" doc:name="Database Name" /&gt;
+&lt;global-property name="mssql.user" value="MuleApp" doc:name="Username" /&gt;
+&lt;global-property name="mssql.password" value="superSecure!" doc:name="Password" /&gt;
+--&gt;
+</pre>
+<h2>Configuration and Performance Considerations</h2>
+<p>By default, the maximum database connections is 5, unlike .NET where it's 100. If you think you'll need more, then make sure you set it higher. If you'll be using the connection frequently; I would strongly recommend using a minimum connection pool size to lower the overhead on both Mule and SQL Server.</p>
+<p>If you're using the standard port, then you don't need to specify it but it doesn't hurt and future proofs your application. Only bother with a re-connection strategy if you really need to the data. If it's just logging, then consider throwing it away rather than overloading a server which may already be suffering from being overloaded.</p>
+<p>If you're load balancing the connections, I would also suggest setting the Load Balance Timeout, otherwise the connections will be sticky and won't automatically balance after a server restart etc.</p>
+<pre>LoadBalanceTimeout=5000
+</pre>
+<p>Again, I would set an application name to help when diagnosing issues.</p>
+<p>Consider enabling <a href="https://docs.microsoft.com/en-us/sql/relational-databases/logs/control-transaction-durability?view=sql-server-ver15">delayed durability</a> when saving logging data as it will reduce the time in SQL Server and free up database connections quicker. I would also specify the specific stored procedure in use rather than forcing it for the entire database. With Delayed Durability, comes the possibility of <strong>data loss</strong>, so make sure you understand the risks.</p>
+<p>Consider using memory optimised tables for very busy applications, then process the data using a separate process. This could be called from Mule or via the SQL Server Agent. Again, if the data isn't essential, I would opt for a SCHEMA_ONLY table; which is faster but you'll lose the data should SQL Server restart. If this isn't an option, you can use the default of SCHEMA_AND_DATA which will commit the data to disk. If you decide to use memory-optimized tables, consider a <a href="https://docs.microsoft.com/en-gb/sql/relational-databases/in-memory-oltp/a-guide-to-query-processing-for-memory-optimized-tables?view=sql-server-ver15">natively compiled stored procedure</a> which will reduce the overhead of the queries and improve the performance.</p>
+<p>Use a stored procedure or parameterised queries when communicating with SQL Server as this will enable SQL Server to reuse execution plans.</p>
+<h2 id="quick-test">Quick Test</h2>
+<p>I've created a HTTP service listening on 8081 that will then connect to the database, retrieve the server and service name, then return it as JSON.</p>
+<p><img class="img-fluid" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.xten.uk/Content/images/blog/test.png" data-lazy-load alt="Connecting SQL Server to Mulesoft 3.9 Test Results" /></p>
+<p><img class="img-fluid" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.xten.uk/Content/images/blog/database.png" data-lazy-load alt="Connecting SQL Server to Mulesoft 3.9 Database Link" /></p>
+<p>Here are the example results in JSON.</p>
+<p><img class="img-fluid" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.xten.uk/Content/images/blog/results.png" data-lazy-load alt="THE JSON results from the SQL Server Mulesoft Test" /></p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>Microsoft has made the cheaper (or free) versions of SQL Server very powerful by allowing us to use features that were previously enterprise only. For me, it does everything I need from a database. In-memory tables that can handle thousands of updates a second, to large clustered columnstore tables that can handle real-time analytical queries that drive dashboards.</p>
+<p>It would be nice to see the JTDS driver get more attention, as it's much faster than ODBC but at the time of writing, doesn't work with the latest versions of SQL Server and doesn't have much documentation / support. Maybe Microsoft could release and maintain JTDS driver in parallel to JDBC?</p>
+<p>Utilising the cache scope could also prove quite powerful as it will reduce the resource requirements of SQL Server, whilst improving the performance of your Mule application. I'll try to blog on this soon but feel free to pester me if I haven't.</p>
+<p>Further reading:</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/using-the-jdbc-driver?view=sql-server-ver15" target="_blank" rel="noopener noreferrer">Using the JDBC driver | Microsoft</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/connect/jdbc/building-the-connection-url?view=sql-server-ver15" target="_blank" rel="noopener noreferrer">Building the connection URL | Microsoft</a></li>
+<li><a href="https://docs.mulesoft.com/db-connector/0.3.9/" target="_blank" rel="noopener noreferrer">Database Connector | MuleSoft</a></li>
+<li><a href="https://docs.mulesoft.com/mule-runtime/3.9/cache-scope" target="_blank" rel="noopener noreferrer">Cache Scope | MuleSoft</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/in-memory-oltp/defining-durability-for-memory-optimized-objects?view=sql-server-ver15" target="_blank" rel="noopener noreferrer">Defining Durability for Memory-Optimized Objects | Microsoft</a></li>
+<li><a href="https://docs.microsoft.com/en-us/sql/relational-databases/logs/control-transaction-durability?view=sql-server-ver15" target="_blank" rel="noopener noreferrer">Control Transaction Durability | Microsoft</a></li>
+<li><a href="https://docs.microsoft.com/en-gb/sql/relational-databases/in-memory-oltp/a-guide-to-query-processing-for-memory-optimized-tables?view=sql-server-ver15" target="_blank" rel="noopener noreferrer">Natively Compiled Store Procedures | Microsoft</a></li>
+</ul>
+<p>Original post by Phil Grayson at <a href="https://www.xten.uk/technical-blogs/using-sql-server-with-mulesoft">https://www.xten.uk/technical-blogs/using-sql-server-with-mulesoft</a></p>
+                </div>
+
+                                                    
+                                    
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+                
+                                                    
+                                                    
+                                                    
+            </div>
+        </div>
+
+        <div class="grid__col grid__col--span-2-of-12 content-single-sidebar">
+            <div class="sidebar">
+    <aside class="sidebar__widget sidebar__widget--advads_ad_widget-4 sqlse-widget clearfix"><a href="https://www.pass.org/summit/2020/Register-Now?utm_source=Redgate&#038;utm_medium=web&#038;utm_campaign=SQLServerCentral"><img   src='https://www.sqlservercentral.com/wp-content/uploads/2020/10/PASS_20_DisplayBanners_336x280-003.jpg' alt=''  width="100%"  style="max-width:100%;"/></a></aside></div>            <!-- template-parts/content-single-sidebar-meta.php -->
+
+    <div class="spaced-bottom">
+        
+        <div data-target="ssc-visitor-counter">
+            <!-- Target for ssc-visitor-counter.js, which dynamically injects
+            right here visitor stats for the current post or page. -->
+        </div>
+    </div>
+
+    <div class="spaced-bottom">
+        <h2 class="gamma">Rate</h2>
+        
+<div class="ssc-star-rating ssc-star-rating--interactive" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" data-target="ssc-star-rating" data-post="3788882">
+
+            <meta itemprop="ratingValue" content="5" />
+        <meta itemprop="ratingCount" content="5" />
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+                    <div class="ssc-star-rating__vote" hidden style="display: none;">
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                            </div>
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">5</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+    </div>
+
+    <div class="spaced-bottom">
+        
+<!-- template-parts/ssc-social-icons.php -->
+<h2 class="gamma">Share</h2>
+<ul class="sharing list--horizontal">
+            <li><a class="sharing__link sharing__link--email" title="Email" target="" href="mailto:?subject=Article on https://www.sqlservercentral.com: Connecting to SQL Server with MuleSoft AnyPoint 3.9&body=I found this great article on https://www.sqlservercentral.com.%0D%0A%0D%0A
+It's called Connecting to SQL Server with MuleSoft AnyPoint 3.9.%0D%0A%0D%0A
+You can find it here http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9."></a></li>
+            <li><a class="sharing__link sharing__link--facebook" title="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&quote=Connecting to SQL Server with MuleSoft AnyPoint 3.9"></a></li>
+            <li><a class="sharing__link sharing__link--twitter" title="Tweet" target="_blank" href="https://twitter.com/intent/tweet?source=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&text=Connecting to SQL Server with MuleSoft AnyPoint 3.9:%20http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9"></a></li>
+            <li><a class="sharing__link sharing__link--linked-in" title="Share on LinkedIn" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&title=Connecting to SQL Server with MuleSoft AnyPoint 3.9&summary=I usually write about SQL Server, but I thought I'd share my experience of using SQL Server&source=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9"></a></li>
+            <li><a class="sharing__link sharing__link--print" title="Print" target="" href="javascript:window.print && window.print();"></a></li>
+    </ul>
+<!-- / template-parts/ssc-social-icons.php -->
+    </div>
+
+
+
+        <div class="post__tags spaced-bottom">
+            <h2 class="gamma">Categories</h2>
+            <ul class="list--bare">
+                                                        <li><a href="https://www.sqlservercentral.com/categories/mulesoft" class="label background-color--blue--1 color--blue--8">Mulesoft</a></li>
+                            </ul>
+        </div>
+    
+
+<meta itemprop="keywords" content="Mulesoft">
+
+<!-- / template-parts/content-single-sidebar-meta.php -->
+        </div>
+    </div>
+</div>
+
+<!-- template-parts/content-single-meta.php -->
+<div class="band content-single-meta">
+    <div class="band__inner-container padded--tight--small padded-top--none grid">
+        <div class="grid__row spaced-bottom">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <div class="padded-left padded-h--none--small clearfix">
+
+                                            <p><a href="https://www.sqlservercentral.com/forums/topic/connecting-to-sql-server-with-mulesoft-anypoint-3-9"><strong>Join the discussion and add your comment</strong></a></p>                    
+                                            
+        <div data-target="ssc-related-forum-topics-top-comments">
+            <!-- Target for ssc-related-forum-topics/top-comments.js. -->
+        </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="grid__row hide-on-small">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <div class="padded-left padded-h--none--small clearfix">
+
+                                            <div class="grid__col grid__col--span-3-of-12">
+                            
+<!-- template-parts/ssc-social-icons.php -->
+<h2 class="gamma">Share</h2>
+<ul class="sharing list--horizontal">
+            <li><a class="sharing__link sharing__link--email" title="Email" target="" href="mailto:?subject=Article on https://www.sqlservercentral.com: Connecting to SQL Server with MuleSoft AnyPoint 3.9&body=I found this great article on https://www.sqlservercentral.com.%0D%0A%0D%0A
+It's called Connecting to SQL Server with MuleSoft AnyPoint 3.9.%0D%0A%0D%0A
+You can find it here http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9."></a></li>
+            <li><a class="sharing__link sharing__link--facebook" title="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&quote=Connecting to SQL Server with MuleSoft AnyPoint 3.9"></a></li>
+            <li><a class="sharing__link sharing__link--twitter" title="Tweet" target="_blank" href="https://twitter.com/intent/tweet?source=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&text=Connecting to SQL Server with MuleSoft AnyPoint 3.9:%20http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9"></a></li>
+            <li><a class="sharing__link sharing__link--linked-in" title="Share on LinkedIn" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9&title=Connecting to SQL Server with MuleSoft AnyPoint 3.9&summary=I usually write about SQL Server, but I thought I'd share my experience of using SQL Server&source=http://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9"></a></li>
+            <li><a class="sharing__link sharing__link--print" title="Print" target="" href="javascript:window.print && window.print();"></a></li>
+    </ul>
+<!-- / template-parts/ssc-social-icons.php -->
+                        </div>
+                    
+                                            <div class="grid__col grid__col--span-3-of-12">
+                            <h2 class="gamma">Rate</h2>
+                            
+<div class="ssc-star-rating ssc-star-rating--interactive" data-target="ssc-star-rating" data-post="3788882">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+                    <div class="ssc-star-rating__vote" hidden style="display: none;">
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                            </div>
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">5</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/connecting-to-sql-server-with-mulesoft-anypoint-3-9">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+                        </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / template-parts/content-single-meta.php -->
+
+
+<!-- template-parts/ssc-related-content-list.php -->
+<div class="band border-top border-color--grey--3 related-content">
+    <div class="band__inner-container grid">
+        <div class="grid__row">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <h1 class="text--normal padded-h padded-h--none--small spaced-bottom">Related content</h1>
+            </div>
+        </div>
+
+        
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/forums/forum/article-discussions/article-discussions-by-author/discuss-content-posted-by-the-xten-team" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/ssc.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/forums/forum/article-discussions/article-discussions-by-author/discuss-content-posted-by-the-xten-team">Discuss content posted by The Xten Team</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/the-xten-team" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">The xTEN Team</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="https://www.sqlservercentral.com">SQLServerCentral</a></li>
+                        </ul>
+                    
+                    
+                                    </div>
+            
+            
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                    </div>
+
+        
+            </div>
+
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/forums/forum/article-discussions/article-discussions-by-author/discuss-content-posted-by-the-xten-team">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none"><span itemprop="dateCreated">2020-10-09</span></p>
+                                    <p class="spaced-bottom--none">1 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/editorials/falling-over-our-assumptions" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/editorial.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/editorials/falling-over-our-assumptions">Falling Over our Assumptions</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/phil-factor" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Phil Factor</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/editorial">Editorial</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>There's a saying about what it says about a person to assume something. However it's something we all do every day. Phil Factor brings us a guest editorial about assumptions in SQL code.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4.83</span>
+            (<span data-target="ssc-star-rating-count">6</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/editorials/falling-over-our-assumptions">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none">2020-06-25 <span class="date--first-published">(first published: <span itemprop="datePublished">2009-04-08</span>)</span></p>
+                                    <p class="spaced-bottom--none">414 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/falling-over-our-assumptions">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/editorials/annoyances" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/editorial-cowboy.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/editorials/annoyances">Annoyances</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/steve-jones-ssc-editor" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Steve Jones</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/editorial">Editorial</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>Working with others can be a challenge. This Friday's poll asks for those little annoyances in the workplace and how to deal with them.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4</span>
+            (<span data-target="ssc-star-rating-count">1</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/editorials/annoyances">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none">2020-06-26 <span class="date--first-published">(first published: <span itemprop="datePublished">2009-03-27</span>)</span></p>
+                                    <p class="spaced-bottom--none">337 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/annoyances">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/editorials/it-depends" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/editorial-cowboy.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/editorials/it-depends">It Depends</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/steve-jones-ssc-editor" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Steve Jones</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/editorial">Editorial</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>It depends. The mantra of many DBAs and others in IT. Steve Jones reminds us why it applies.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4</span>
+            (<span data-target="ssc-star-rating-count">1</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/editorials/it-depends">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none">2020-06-23 <span class="date--first-published">(first published: <span itemprop="datePublished">2009-03-25</span>)</span></p>
+                                    <p class="spaced-bottom--none">304 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/it-depends">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/editorials/the-challenges-of-being-safe" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/editorial-cowboy.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/editorials/the-challenges-of-being-safe">The Challenges of Being Safe</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/steve-jones-ssc-editor" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Steve Jones</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/editorial">Editorial</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>Securing your data is a challenge. Steve Jones has a few comments no just how hard it can be to obfuscate your production data as you move it to development environments.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half ">★</span>
+                    </div>
+
+        
+            </div>
+
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/editorials/the-challenges-of-being-safe">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none">2020-06-24 <span class="date--first-published">(first published: <span itemprop="datePublished">2009-03-10</span>)</span></p>
+                                    <p class="spaced-bottom--none">329 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/the-challenges-of-being-safe">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+    </div>
+</div>
+<!-- / template-parts/ssc-related-content-list.php -->
+
+<!-- FOOTER -->
+<footer>
+    <div class="band background-color--blue--9 color--white footer__graphs">
+        <div class="band__inner-container band__inner-container--tight grid">
+            <a href="https://monitor.red-gate.com/overviews/SQLMON-EC2-BM2/cluster/sscdbcluster.ssc.local/sql/ssc-db-n1%5C(local)" target="_blank" rel="noopener" class="flex" title="Take a peek into our servers">
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-12-of-12--medium flex flex-align--center">
+                    <img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc-logo.svg" alt="" class="logo">
+                    <img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc.svg" alt="" class="logo">
+                </div>
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">CPU</p>
+                        <script>var cpuChartData = {"labels":[1603118403104,1603118900447,1603119396848,1603119892601,1603120403211,1603120899167,1603121394196,1603121894946,1603122391243,1603122887735,1603123397767,1603123892984,1603124388236,1603124884113,1603125394405,1603125889685,1603126385418,1603126881746,1603127392361,1603127887207,1603128384427,1603128893251,1603129388659,1603129884879,1603130380187,1603130877468,1603131387577,1603131882618,1603132377870,1603132887965,1603133383075,1603133881422,1603134377157,1603134872611,1603135382644,1603135878087,1603136373491,1603136869570,1603137379603,1603137875423,1603138370501,1603138880575,1603139375906,1603139871000,1603140366982,1603140876854,1603141372060,1603141868341,1603142362756,1603142873255,1603143368993,1603143864049,1603144374418,1603144869730,1603145365406,1603145860704,1603146370596,1603146865846,1603147360880,1603147855910,1603148365981,1603148861087,1603149356259,1603149866423,1603150361816,1603150858783,1603151354989,1603151865682,1603152361787,1603152857209,1603153353087,1603153848707,1603154359694,1603154855383,1603155350527,1603155860591,1603156355635,1603156850875,1603157346787,1603157857160,1603158352082,1603158847227,1603159342824,1603159852872,1603160348324,1603160843477,1603161339255,1603161849746,1603162344756,1603162841478,1603163337435,1603163848843,1603164342994,1603164839089,1603165335586,1603165845632,1603166340771,1603166837684,1603167333365,1603167843083,1603168339566,1603168836634,1603169331441,1603169842178,1603170339631,1603170832996,1603171328155,1603171839555,1603172335834,1603172830669,1603173327136,1603173837534,1603174333933,1603174829973,1603175325481,1603175835910,1603176331222,1603176826416,1603177323186,1603177821048,1603178331223,1603178826338,1603179321641,1603179817500,1603180328240,1603180824165,1603181319763,1603181814935,1603182325654,1603182821198,1603183316247,1603183826480,1603184324165,1603184819664,1603185315150,1603185810260,1603186320835,1603186816179,1603187311422,1603187821696,1603188318394,1603188814314,1603189309611,1603189804720,1603190315175,1603190810378,1603191306218,1603191802247,1603192313002,1603192808386,1603193303355,1603193799228,1603194310406,1603194806685,1603195303447,1603195798924,1603196309429,1603196804928,1603197300432,1603197795738,1603198307070,1603198803890,1603199299522,1603199795022,1603200306192,1603200802221,1603201297294,1603201792889,1603202302939,1603202799044,1603203294120,1603203789221,1603204299635,1603204794667],"dataSets":[{"label":"","data":[9.84118172743419,10.677828740763989,10.968808349515143,8.415224434397237,6.533619336747239,5.3825942378112694,8.602724631238152,10.045073842886973,14.276462537736368,11.784632651964024,8.046357280920136,9.036849291267824,7.533254803329544,12.660641450368335,7.873094365048271,11.137554309348083,10.67233783135329,11.618927696384045,8.097992223183136,11.844358673952037,6.794420742426929,9.999317805068749,7.119681151068417,7.234379110915857,10.201582172536924,10.063326935272414,10.604737716925092,10.59649129541877,10.652332289640313,5.870924183928081,10.5926464228426,8.329493362043491,7.97663222408355,7.616120036796705,5.791599029106463,10.991184541121347,5.703212486396577,7.863226150652264,7.77140013749094,8.460961554420326,8.71194407786826,8.244819677636134,11.363142851930007,9.088383988288374,9.81560667860928,5.608404901658372,8.54875969216671,5.9406756185797365,8.498436372929646,10.13484478117697,7.153946843867017,6.0184983284055305,6.32163733829251,9.184148976486714,9.770842347767406,6.825509263619987,7.094032368505607,10.201208975297623,7.309709972056538,6.23422233777101,7.066272435855487,7.2952284934687235,7.311227200967667,5.352900752592305,6.194183013220337,5.036808206594351,5.539688959034196,8.608096618185868,8.21280871358711,5.365138974086404,8.899931443334964,8.097498352441528,5.829323354841722,7.585717506348705,7.838625080251011,6.05201986422245,9.98254238117728,7.770852642155311,6.908438734080362,10.787525896305144,6.4719798401690705,11.012403984093687,9.621442127452907,10.647347163861882,6.921559751086283,12.41212279342895,5.568495555085082,4.771376080249497,6.763194903169971,5.942870308836184,6.445481133153865,11.579554173620332,8.379260061636462,7.820457103744383,14.270673368251902,7.458738917699459,9.330943969160577,7.131141971017019,11.678606557311978,6.725541552241266,9.25965946747404,7.214176215353742,6.308489543861468,6.783618937378012,17.99008085724729,21.620923162396878,21.0163756624651,21.266647039623084,24.14255609907486,5.951332393282542,5.679191234782277,6.971044711786475,7.621282914366699,6.955477244410906,10.437917636002435,10.852175392087716,6.7839199800648275,10.351053616464627,6.5139509253880306,8.579661272099333,6.099699560155749,6.896668724325429,8.475719195892276,9.64669791084454,7.935409353400345,7.791614987189699,10.27562575453867,7.793612652271359,10.418833373226946,10.529774605680705,10.71034572520226,6.884119464958756,5.717483286927546,7.667065374614401,8.58138769591563,10.70704977065325,7.71381107751342,6.84774198685638,8.235000300909286,9.913869214274222,9.185654234386481,8.259189790859205,12.931398988037712,6.267960083525869,9.46917993016571,8.332671536232834,7.521958187507822,8.80626468784875,4.742525801525311,7.714582474513644,5.758726502436445,9.692887923841498,8.51662876736121,7.47910778612642,8.363142128173076,6.942085679104702,7.684651954370043,12.56702421423519,9.840432894444493,7.66058595082587,6.338767628123096,7.989486408522531,10.601191240928513,7.540926531683131,9.352774235707844,9.048420940266382,10.483774438002529,7.3365067455833435,8.90003066510318,6.553780125779371,10.819434503580016,6.864131221137482,10.976856182178976,10.2183287469684],"colour":"42, 94, 157"}],"chart":"cpu"};</script><div
+        id="chart--cpu"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="cpuChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Memory</p>
+                        <script>var memoryChartData = {"labels":[1603117906000,1603118403084,1603118900437,1603119396834,1603119892591,1603120403201,1603120899158,1603121394186,1603121894937,1603122391228,1603122887725,1603123397758,1603123892974,1603124388226,1603124884103,1603125394396,1603125889665,1603126385408,1603126881736,1603127392341,1603127887197,1603128384386,1603128893241,1603129388650,1603129884870,1603130380148,1603130877458,1603131387568,1603131882609,1603132377861,1603132887952,1603133383066,1603133881412,1603134377148,1603134872602,1603135382635,1603135878026,1603136373482,1603136869560,1603137379594,1603137875413,1603138370488,1603138880566,1603139375896,1603139870990,1603140366962,1603140876844,1603141372051,1603141868331,1603142362747,1603142873235,1603143368984,1603143864040,1603144374409,1603144869720,1603145365396,1603145860678,1603146370587,1603146865837,1603147360870,1603147855901,1603148365971,1603148861079,1603149356250,1603149866414,1603150361807,1603150858774,1603151354969,1603151865621,1603152361777,1603152857200,1603153353077,1603153848697,1603154359683,1603154855363,1603155350506,1603155860581,1603156355625,1603156850865,1603157346777,1603157857150,1603158352070,1603158847165,1603159342807,1603159852863,1603160348314,1603160843467,1603161339246,1603161849725,1603162344747,1603162841469,1603163337425,1603163848833,1603164342985,1603164839079,1603165335577,1603165845623,1603166340762,1603166837658,1603167333356,1603167843074,1603168339556,1603168836614,1603169331432,1603169842169,1603170339611,1603170832982,1603171328145,1603171839546,1603172335614,1603172830659,1603173327125,1603173837524,1603174333923,1603174829964,1603175325472,1603175835896,1603176331212,1603176826406,1603177323175,1603177821038,1603178331212,1603178826324,1603179321631,1603179817491,1603180328230,1603180824150,1603181319754,1603181814925,1603182325645,1603182821189,1603183316235,1603183826469,1603184324156,1603184819654,1603185315139,1603185810249,1603186320825,1603186816168,1603187311402,1603187821686,1603188318384,1603188814305,1603189309602,1603189804694,1603190315163,1603190810366,1603191306209,1603191802238,1603192312988,1603192808361,1603193303345,1603193799219,1603194310345,1603194806675,1603195303437,1603195798903,1603196309420,1603196804903,1603197300422,1603197795729,1603198307060,1603198803879,1603199299510,1603199795008,1603200306179,1603200802211,1603201297285,1603201792879,1603202302928,1603202799035,1603203294112,1603203789211,1603204299625,1603204794657],"dataSets":[{"label":"","data":[53636988928,53631098880,53635440640,53630083072,53633089536,53630894080,53625913344,53646663680,53644566528,53637259264,53637545984,53645434880,53642346496,53639266304,53644779520,53647106048,53643804672,53640347648,53643460608,53631057920,53626470400,53621383168,53624717312,53614854144,53609504768,53634981888,53649489920,53650227200,53645533184,53642985472,53634048000,53638643712,53648056320,53645074432,53642444800,53647147008,53655691264,53655150592,53657780224,53649195008,53657264128,53654093824,53651267584,53658378240,53645164544,53639028736,53636841472,53653479424,53647147008,53644853248,53660336128,53655486464,53645656064,53655977984,53648760832,53644795904,53651013632,53658812416,53652045824,53647335424,53655445504,53660303360,53654913024,53654241280,53652062208,53656240128,53647917056,53649866752,53645697024,53654421504,53658804224,53657337856,53659082752,53651283968,53659271168,53656813568,53658001408,53653725184,53653282816,53663588352,53666545664,53666562048,53662310400,53656731648,53661147136,53654650880,53650563072,53643386880,53660811264,53662212096,53655625728,53655175168,53655715840,53648310272,53647654912,53642559488,53647548416,53655445504,53646032896,53638316032,53636497408,53642952704,53641764864,53642821632,53647572992,53673984000,53687328768,53687083008,53680316416,53666750464,53673172992,53669044224,53670395904,53663817728,53659729920,53657501696,53653151744,53649285120,53643247616,53642117120,53640265728,53659885568,53658050560,53656502272,53657124864,53657010176,53655076864,53645295616,53648343040,53647605760,53646073856,53638750208,53638635520,53642280960,53652619264,53646368768,53647646720,53644705792,53640708096,53638791168,53643001856,53634973696,53636964352,53645230080,53644763136,53638537216,53661376512,53646688256,53643968512,53641969664,53642092544,53646172160,53644574720,53643829248,53656772608,53650997248,53645631488,53645131776,53643354112,53638963200,53636112384,53648588800,53646073856,53639856128,53636055040,53645213696,53651169280,53647360000,53643837440,53642502144,53641150464,53635047424,53627650048,53637332992,53632106496],"colour":"42, 94, 157"}],"chart":"memory"};</script><div
+        id="chart--memory"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="memoryChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Disk I/O</p>
+                        <script>var diskChartData = {"labels":[1603118380582,1603118890645,1603119400690,1603119881159,1603120391267,1603120901298,1603121381374,1603121894312,1603122375263,1603122885372,1603123396231,1603123876245,1603124386260,1603124896291,1603125377592,1603125887664,1603126368210,1603126878475,1603127388493,1603127868509,1603128378761,1603128888904,1603129369014,1603129879047,1603130389267,1603130869284,1603131380020,1603131890053,1603132370069,1603132880165,1603133360212,1603133870995,1603134381184,1603134861201,1603135371624,1603135881704,1603136361752,1603136872535,1603137383068,1603137863475,1603138373508,1603138853993,1603139364010,1603139874043,1603140354122,1603140864374,1603141374475,1603141854548,1603142365097,1603142875130,1603143356115,1603143866522,1603144347039,1603144857072,1603145367105,1603145848731,1603146358857,1603146868921,1603147348938,1603147859783,1603148341221,1603148851319,1603149361428,1603149841702,1603150352380,1603150839122,1603151349239,1603151859407,1603152339499,1603152849632,1603153359709,1603153839812,1603154350392,1603154860608,1603155341405,1603155851495,1603156331567,1603156841684,1603157351751,1603157831882,1603158342457,1603158853719,1603159333746,1603159843838,1603160354491,1603160836036,1603161346081,1603161826126,1603162336215,1603162846419,1603163326447,1603163836603,1603164346633,1603164826975,1603165337052,1603165847145,1603166328266,1603166838461,1603167318579,1603167829485,1603168339781,1603168819827,1603169329872,1603169840936,1603170321339,1603170831371,1603171341401,1603171821417,1603172331493,1603172811539,1603173321553,1603173831913,1603174312021,1603174822052,1603175332129,1603175812159,1603176323440,1603176833455,1603177314953,1603177825125,1603178305140,1603178815170,1603179325201,1603179805418,1603180315746,1603180826448,1603181306463,1603181816478,1603182327166,1603182808007,1603183318023,1603183798287,1603184308318,1603184818380,1603185299973,1603185810034,1603186320081,1603186800126,1603187310173,1603187820578,1603188301046,1603188811076,1603189291248,1603189801419,1603190311560,1603190791573,1603191301589,1603191811822,1603192292868,1603192802883,1603193312992,1603193794006,1603194304037,1603194784051,1603195295114,1603195805129,1603196285690,1603196795893,1603197306388,1603197786594,1603198296649,1603198806921,1603199286936,1603199796951,1603200277684,1603200787699,1603201299073,1603201779105,1603202289119,1603202799448,1603203279470,1603203789492,1603204299522,1603204779554],"dataSets":[{"label":"","data":[7457968.006255505,2063609.6092485266,2031418.7665663166,2006694.1563609394,4305910.109101656,1888718.3940974644,2638247.4876153274,2250568.9831349812,20420327.879776843,1736268.3108420933,2198799.0059394646,1887890.8700520021,1692545.79343154,2378594.460381119,2348404.540547357,2166685.670974926,2278544.3854686026,1642462.829039249,1845762.3737305468,1877822.7248290689,3539470.4845065484,2518791.565069043,1569593.125933373,3015915.8656247947,4133057.1974788317,2092295.8859393664,3147072.0266787144,2843271.905495134,5453335.1921508955,4553125.946889388,5179585.469824981,4998831.6529351175,2841372.004895771,2721940.8478778116,2618814.8444817616,2391349.2214048477,2233713.232176114,2652718.092792603,2220439.2575643444,2454006.912648227,4614928.1540751085,2397659.8871501074,7259969.683849091,4720505.0596606685,2354302.1302448465,2002268.8600413026,7202207.09084983,3224443.0817044284,4560774.810706093,4937951.126843996,7616315.918507027,4484338.437495923,1903462.6691365128,1901944.2788346463,1910456.1669930278,1785925.376245439,2292051.136553441,2593051.8329033665,1788099.133478017,2364325.623990584,2610743.305913625,2400666.4758363273,2490148.044848636,1649720.712609281,2661956.3203342264,2670635.9849768886,1833613.8058141512,2040949.2444268279,5651077.879754604,2149701.727686695,1865477.0561727933,7833814.8398905955,1733824.478406183,1503256.5616243468,1607156.4503457197,4467794.551809442,4403712.594443673,7692775.637071385,4813032.436850915,2521451.3431944204,2265407.643596018,2026505.221525694,1978165.8180499983,1826111.7191660171,6539145.2804102525,4319824.291352794,2286298.867913211,1935731.968656271,1761806.2737062932,1840571.9348497426,1866711.7131026688,2381488.6312938537,2138527.7276516263,2744601.2729889285,10327149.468783924,2471170.1438643723,6158722.426343279,5322568.78578353,8537422.67769124,2437124.31093771,4699956.073800987,2121736.999945378,1521733.1234682277,2070716.0733463843,40611216.26189249,78601292.33148366,87654228.86008705,69094166.1854161,15629957.586436635,1779439.4674218034,4208310.798569482,4190376.3762629083,25343866.910732996,38989175.36812693,38857927.61904381,56390758.54372106,47198227.223001555,31024842.93034192,30583553.238880254,29006116.295497276,4528046.316171369,1924963.9116195117,2881490.0136155086,4136172.1310757287,4968683.597382408,4073728.1552173095,7527946.087116567,4217574.84076932,1802693.8889044214,2581324.4253494195,5264302.874071803,2258954.94623277,1957877.858727749,3342687.0354947587,1904298.523880477,4791342.245985272,2836208.666011137,1858309.845630311,2002428.768190076,1802189.3584001833,2101713.0809574598,1744023.1215545905,1920774.225337248,1689789.195988186,2081222.1550343316,4604337.934171735,2286497.843657609,1908490.037344525,1730393.4056141058,2571291.2550542485,1986269.2474822793,5712444.74015819,1904451.9426526674,1758660.3339838437,2045566.8916013741,1860238.732095493,1640705.313270038,2550898.0452361535,2534119.288435467,4917068.130735686,2097216.9916074914,2200832.5472847745,2478459.8113720664,2351683.0112036243,5144089.615658756,3051564.7261110293,2488226.706946392,5212764.202977357,7377292.39484932,4996357.103013787,2846658.0338407797,2131607.0649814783,2496041.4108596644,2344250.0004309085],"colour":"42, 94, 157"}],"chart":"disk"};</script><div
+        id="chart--disk"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="diskChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Waits</p>
+                        <script>var waitsChartData = {"labels":[1603118346923,1603118826610,1603119306377,1603119786970,1603120386467,1603120866547,1603121346547,1603121890403,1603122369827,1603122849950,1603123329907,1603123810500,1603124290187,1603124890857,1603125370857,1603125850280,1603126330327,1603126810373,1603127290373,1603127890370,1603128371043,1603128851183,1603129330480,1603129810497,1603130290530,1603130890557,1603131371683,1603131851510,1603132332073,1603132811607,1603133291887,1603133771640,1603134372120,1603134851637,1603135331650,1603135812590,1603136291997,1603136772527,1603137372057,1603137852633,1603138332777,1603138812260,1603139292247,1603139772340,1603140372243,1603140852307,1603141332383,1603141812383,1603142292430,1603142772603,1603143372803,1603143852837,1603144332837,1603144812883,1603145292837,1603145772900,1603146253180,1603146853133,1603147332993,1603147812947,1603148293070,1603148773087,1603149253603,1603149853413,1603150334023,1603150813523,1603151293790,1603151773307,1603152254290,1603152854367,1603153334960,1603153814337,1603154294477,1603154774443,1603155255070,1603155854553,1603156334630,1603156815053,1603157294693,1603157774693,1603158254663,1603158855020,1603159335723,1603159815460,1603160295070,1603160775083,1603161255633,1603161735163,1603162335100,1603162815147,1603163295817,1603163775240,1603164255443,1603164736337,1603165336223,1603165816333,1603166296380,1603166776380,1603167256333,1603167736427,1603168336380,1603168816830,1603169296457,1603169776520,1603170257410,1603170737333,1603171336957,1603171818270,1603172297067,1603172776973,1603173256973,1603173737020,1603174337127,1603174817143,1603175297020,1603175777283,1603176257177,1603176737130,1603177217350,1603177817487,1603178297503,1603178777720,1603179257427,1603179738003,1603180217990,1603180817533,1603181298067,1603181777973,1603182257630,1603182737630,1603183217613,1603183817533,1603184297610,1603184779050,1603185258393,1603185738533,1603186218363,1603186818877,1603187298440,1603187778470,1603188258987,1603188738457,1603189218567,1603189818610,1603190298547,1603190778813,1603191259173,1603191739690,1603192219597,1603192699660,1603193299657,1603193780203,1603194259737,1603194739707,1603195219720,1603195700237,1603196300813,1603196779843,1603197259800,1603197739813,1603198219707,1603198699893,1603199300140,1603199780203,1603200260220,1603200740313,1603201220800,1603201700267,1603202300233,1603202780813,1603203260640,1603203740440,1603204220533,1603204700640],"dataSets":[{"label":"","data":[143.05633887821722,94.16140108028776,108.64023578111875,81.00617362300325,36.40051576571693,26.376853857690385,49.04583333333333,109.62828395751818,176.63487852089176,99.49533765305975,92.74372495869422,115.32835476172147,26.827910700102354,197.8707110393394,27.166666666666664,150.1325551757008,72.91161073811521,52.29082212954592,59.27083333333334,80.14040070200352,33.20552641816786,36.204023826383974,28.850587422829683,31.0759827256118,89.86257194817856,86.48610812513438,55.3805032361585,82.31716847947281,72.57945368245164,45.565069421563436,141.2738402598484,43.12218996025038,38.99047428723688,40.3218238352342,27.88674473399679,70.94647981037137,16.785320197660855,45.18760535242336,28.013610661684986,42.44698029031829,81.16731647172516,150.3327542373765,88.0773854291887,87.02480561057962,63.27356255928041,29.358585521930404,56.17027304010199,18.62083333333333,42.79164331825842,70.75574844899651,48.25224925024991,31.614427311398774,32.15625,30.322094132645617,62.0434458302254,37.09929738388503,22.726326309652702,95.519149000005,59.040136706539414,29.742433649891446,15.575175527937633,32.22177547878513,28.48188197687486,18.669245260999315,24.864235034643475,28.02711157455683,41.837144754896755,34.10723707397234,52.405178561404455,52.24162899094617,90.4445133408102,71.26332719341981,44.98271337526555,78.84308471850088,62.12717970484388,20.210748261418587,132.1767133189051,50.02258426428377,50.15219748144442,33.954166666666666,52.51994916348937,103.62834113702348,78.75964992937426,37.63103533811233,46.42313546423135,52.86731817679937,30.41098741025908,25.572956853585808,25.77937350088426,21.589552689632473,34.2625917989473,80.3298965631603,42.933925860521484,84.98962349291111,135.59909716179408,55.56018412447147,58.325538957643715,38.77916666666666,101.85997378910018,20.59596662320296,64.26670089156984,40.453741284212725,43.446261365602844,28.029654441187926,154.4739961321716,270.2537698755842,207.59342521313354,210.74228204931094,214.3747767843157,51.58926956528987,18.745833333333334,46.80999985418094,70.70072503736834,69.18936035465484,97.57500359467113,107.27247362382695,67.24610018045651,213.50215541938476,35.854400066636124,116.5250601112746,16.076547448418385,27.316817188895858,73.42607049719932,126.60640564655748,48.34089256584032,64.64757323494729,64.51988829094299,50.101478206148705,55.262406261140775,69.93125,50.59970873968453,40.410388051740235,10.902417737154666,25.814223994682617,44.16044460855796,194.03923855542135,52.381051622449625,19.61652850724546,37.283943923947426,133.22917317667648,61.090450493947145,56.66882182409744,103.25758680302431,116.85662527518862,121.35551124418413,78.065072272449,34.57406944791407,40.99959002491066,16.5844632397527,38.213734447353794,20.743437050518587,110.73445622271335,37.95768391813719,44.159009938121116,89.66632153712504,24.14690843404083,68.64909686700767,180.15781892574577,39.57646205805937,57.59010693460385,47.50215672627706,29.892583290641543,116.0255694738999,31.620849763468545,40.77772245566303,39.58608019696184,84.75359374967482,25.336467368974304,49.81948977108703,51.173581921844445,90.52429313064916,56.15673197165486,234.83158471379502,88.51985078326288],"colour":"42, 94, 157"}],"chart":"waits"};</script><div
+        id="chart--waits"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="waitsChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-12-of-12--medium text--right flex flex-align--center flex-justify--end">Take a peek into our servers</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="band background-color--blue--8 color--white footer__menu">
+        <div class="band__inner-container padded-v--loose padded-h--tight grid flex">
+            <div class="grid__col grid__col--span-9-of-12 grid__col--span-12-of-12--medium flex flex-align--center">
+                <ul id="menu-footer-menu" class="list--horizontal spaced-bottom--none"><li id="menu-item-22" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-22 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/about">About SQLServerCentral</a></li>
+<li id="menu-item-3673197" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3673197 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contact-us">Contact Us</a></li>
+<li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-24 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/terms">Terms of Use</a></li>
+<li id="menu-item-26" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-26 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/privacy">Privacy Policy</a></li>
+<li id="menu-item-28" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-28 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contribute">Contribute</a></li>
+<li id="menu-item-30" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-30 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contributors">Contributors</a></li>
+<li id="menu-item-3425913" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3425913 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/author">Authors</a></li>
+<li id="menu-item-3426090" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3426090 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/newsletter-archive">Newsletters</a></li>
+</ul>            </div>
+
+            <div class="grid__col grid__col--span-2-of-12 grid__col--push-1-of-12 grid__col--span-12-of-12--medium grid__col--push-0-of-12--medium flex flex-align--center flex-justify--end">
+                <a href="https://www.red-gate.com/" target="_blank" class="link-image"><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/footer/redgate.svg" alt=""/></a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- / FOOTER -->
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_utilities_ajax_combined_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-utilities/js/ajax-combined.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-performance/js/ssc-lazy-load.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_related_forum_topics_top_comments_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","post_id":"3788882"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/js/top-comments.min.js?ver=2020-06-03'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_star_ratings_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/js/interactive.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=sql&#038;lang=vb'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/inc/lexers/lang-vs.js'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/js/highlight.pack.js'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/js/init.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_visitor_counter_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","post_id":"3788882","is_singular":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-visitor-counter/js/ssc-visitor-counter.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.14-6684'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var SSC2018 = {"templateUrl":"https:\/\/www.sqlservercentral.com\/wp-content\/themes\/ssc-twentyeighteen"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/js/sqlservercentral.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/js/front.js?ver=3.1_b2302_free'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var newsletter = {"messages":{"email_error":"Email address is not correct","name_error":"Name is required","surname_error":"Last name is required","privacy_error":"You must accept the privacy policy"},"profile_max":"20"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/newsletter/subscription/validate.js?ver=5.8.9'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/wp-embed.min.js?ver=5.1.1'></script>
+
+</body>
+</html>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.w3-edge.com/products/
+
+Page Caching using redis 
+
+Served from: sqlservercentral.com @ 2020-10-20 16:34:36 by W3 Total Cache
+-->
